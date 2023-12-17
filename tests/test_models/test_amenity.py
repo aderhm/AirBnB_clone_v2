@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """
 This file contains amenity.py unit tests.
 """

@@ -10,15 +10,14 @@ class FileStorage:
 
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
-        objs = FileStorage.__objects
-
-        if cls:
-            return {
-                k: v for k,
-                v in objs.items() if k.split(".")[0] == cls.__name__
-            }
-
-        return FileStorage.__objects
+        if cls is None:
+            return FileStorage.__objects
+        class_name = cls.__name__
+        dict = {}
+        for key in FileStorage.__objects.keys():
+            if key.split('.')[0] == class_name:
+                dict[key] = FileStorage.__objects[key]
+        return dict
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -33,6 +32,14 @@ class FileStorage:
                 temp[key] = val.to_dict()
             json.dump(temp, f)
 
+    def delete(self, obj=None):
+        """Deletes obj from __objects if it is inside"""
+        if obj is None:
+            return
+        obj_key = obj.to_dict()['__class__'] + '.' + obj.id
+        if obj_key in FileStorage.__objects.keys():
+            del FileStorage.__objects[obj_key]
+
     def reload(self):
         """Loads storage dictionary from file"""
         from models.base_model import BaseModel
@@ -44,10 +51,10 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-            'BaseModel': BaseModel, 'User': User, 'Place': Place,
-            'State': State, 'City': City, 'Amenity': Amenity,
-            'Review': Review
-        }
+                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
+                    'State': State, 'City': City, 'Amenity': Amenity,
+                    'Review': Review
+                  }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
@@ -56,9 +63,3 @@ class FileStorage:
                     self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
-
-    def delete(self, obj=None):
-        """Delete obj from __objects if it’s inside"""
-        if obj:
-            FileStorage.__objects.pop(
-                f"{obj.to_dict()['__class__']}.{obj.id}")

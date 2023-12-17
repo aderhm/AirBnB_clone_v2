@@ -37,8 +37,7 @@ class FileStorage:
         if obj is None:
             return
         obj_key = obj.to_dict()['__class__'] + '.' + obj.id
-        if obj_key in FileStorage.__objects.keys():
-            del FileStorage.__objects[obj_key]
+        del FileStorage.__objects[obj_key]
 
     def reload(self):
         """Loads storage dictionary from file"""

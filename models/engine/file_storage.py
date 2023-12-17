@@ -26,7 +26,7 @@ class FileStorage:
             json.dump(temp, f)
 
     def delete(self, obj=None):
-        """Deletes obj from __objects if it’s inside"""
+        """Deletes obj from __objects if it is inside"""
         print("### Deleting...")
         if obj:
             for k, v in list(FileStorage.__objects.items()):

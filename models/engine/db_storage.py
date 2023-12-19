@@ -48,7 +48,7 @@ class DBStorage:
         if cls:
             data = self.__session.query(cls).all()
         else:
-            hbnb_classes = [City, State, User, Place]
+            hbnb_classes = [City, State, User, Place, Review]
             data = []
             for hc in hbnb_classes:
                 data.extend(self.__session.query(hc).all())

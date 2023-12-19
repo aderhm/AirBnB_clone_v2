@@ -8,6 +8,7 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+from models.place import Place
 from models.base_model import Base
 from os import getenv
 
@@ -47,7 +48,7 @@ class DBStorage:
         if cls:
             data = self.__session.query(cls).all()
         else:
-            hbnb_classes = [City, State, User]
+            hbnb_classes = [City, State, User, Place]
             data = []
             for hc in hbnb_classes:
                 data.extend(self.__session.query(hc).all())

@@ -35,7 +35,7 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     user = relationship("User", back_populates="places")
     cities = relationship("City", back_populates="places")
-    reviews = relationship("Review", back_populates="places",
+    reviews = relationship("Review", back_populates="palce",
                            cascade="all, delete")
     amenities = relationship(
         'Amenity', secondary=association_table, viewonly=False)

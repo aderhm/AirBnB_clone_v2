@@ -8,10 +8,12 @@ from sqlalchemy.orm import relationship
 
 class Amenity(BaseModel, Base):
     """
+<<<<<<< HEAD
         class Amenity
         __tablename__: the name of table
         name: column
     """
+
     __tablename__ = "amenities"
 
     name = Column(String(128), nullable=False)

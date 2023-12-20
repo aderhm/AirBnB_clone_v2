@@ -41,6 +41,8 @@ class Place(BaseModel, Base):
         'Amenity', secondary='place_amenity', viewonly=False,
         back_populates='place_amenities')
 
+    amenity_ids = []
+
     @property
     def reviews(self):
         """Getter attribute for reviews in FileStorage"""

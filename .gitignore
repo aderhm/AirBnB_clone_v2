@@ -2,7 +2,8 @@
 /models/engine/__pycache__
 /tests/test_models/__pycache__
 /tests/test_models/test_engine/__pycache__
-file.json
-test_params_create
+/file.json
+/test_params_create
 /main_delete.py
 /env
+/main_place_amenities.py

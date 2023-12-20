@@ -1,10 +1,8 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from os import getenv
-from models import storage
 from models.base_model import BaseModel, Base
 from models.review import Review
-from models.amenity import Amenity
 from sqlalchemy import String, Column, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 
@@ -32,42 +30,41 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float)
     longitude = Column(Float)
-    user = relationship("User", back_populates="places")
-    cities = relationship("City", back_populates="places")
-    reviews = relationship("Review", back_populates="places",
+    reviews = relationship("Review", backref="place",
                            cascade="all, delete")
-
-    amenities = relationship(
-        'Amenity', secondary=place_amenity, viewonly=False)
+    amenities = relationship('Amenity', secondary='place_amenity',
+                             viewonly=False, backref='place_amenities')
 
     amenity_ids = []
 
     @property
     def reviews(self):
         """Getter attribute for reviews in FileStorage"""
-
+        from models import storage
         reviews_list = []
         for rev in storage.all(Review).values():
             if rev.place_id == self.id:
                 reviews_list.append(rev)
         return reviews_list
 
-    if getenv("HBNB_TYPE_STORAGE") != 'db':
-        @property
-        def amenities(self):
-            """
-                return the list of Amenity
-            """
-            amenity_list = []
-            for amenity in list(storage.all(Amenity).values()):
-                if amenity.id in self.amenity_ids:
-                    amenity_list.append(amenity)
-            return amenity_list
+    @property
+    def amenities(self):
+        """
+            return the list of Amenity
+        """
+        from models import storage
+        from models.amenity import Amenity
+        amenity_list = []
+        for amenity in list(storage.all(Amenity).values()):
+            if amenity.id in self.amenity_ids:
+                amenity_list.append(amenity)
+        return amenity_list
 
-        @amenities.setter
-        def amenities(self, value):
-            """
-                adding an Amenity.id to the attribute amenity_ids
-            """
-            if type(value) is Amenity:
-                self.amenity_ids.append(value.id)
+    @amenities.setter
+    def amenities(self, value):
+        """
+            adding an Amenity.id to the attribute amenity_ids
+        """
+        from models.amenity import Amenity
+        if type(value) is Amenity:
+            self.amenity_ids.append(value.id)

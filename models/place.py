@@ -34,7 +34,6 @@ class Place(BaseModel, Base):
                            cascade="all, delete")
     amenities = relationship('Amenity', secondary='place_amenity',
                              viewonly=False, backref='place_amenities')
-
     amenity_ids = []
 
     @property

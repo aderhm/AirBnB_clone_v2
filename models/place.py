@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
+from os import getenv
 from models import storage
 from models.base_model import BaseModel, Base
 from models.review import Review
@@ -33,11 +34,13 @@ class Place(BaseModel, Base):
     longitude = Column(Float)
     user = relationship("User", back_populates="places")
     cities = relationship("City", back_populates="places")
-    reviews = relationship("Review", back_populates="palce",
+    reviews = relationship("Review", back_populates="places",
                            cascade="all, delete")
 
     amenities = relationship(
         'Amenity', secondary=place_amenity, viewonly=False)
+
+    amenity_ids = []
 
     @property
     def reviews(self):
@@ -49,21 +52,22 @@ class Place(BaseModel, Base):
                 reviews_list.append(rev)
         return reviews_list
 
-    @property
-    def amenities(self):
-        """
-            return the list of Amenity
-        """
-        amenity_list = []
-        for amenity in list(storage.all(Amenity).values()):
-            if amenity.id in self.amenity_ids:
-                amenity_list.append(amenity)
-        return amenity_list
+    if getenv("HBNB_TYPE_STORAGE") != 'db':
+        @property
+        def amenities(self):
+            """
+                return the list of Amenity
+            """
+            amenity_list = []
+            for amenity in list(storage.all(Amenity).values()):
+                if amenity.id in self.amenity_ids:
+                    amenity_list.append(amenity)
+            return amenity_list
 
-    @amenities.setter
-    def amenities(self, value):
-        """
-            adding an Amenity.id to the attribute amenity_ids
-        """
-        if type(value) is Amenity:
-            self.amenity_ids.append(value.id)
+        @amenities.setter
+        def amenities(self, value):
+            """
+                adding an Amenity.id to the attribute amenity_ids
+            """
+            if type(value) is Amenity:
+                self.amenity_ids.append(value.id)

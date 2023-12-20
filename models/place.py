@@ -8,11 +8,12 @@ from sqlalchemy import String, Column, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 
 
-place_amenity = Table('user', Base.metadata,
-                      Column('place_id', String(60), ForeignKey('places.id')),
-                      Column('amenity_id', String(60),
-                             ForeignKey('places.id')),
-                      )
+association_table = Table('place_amenity', Base.metadata,
+                          Column('place_id', String(60),
+                                 ForeignKey('places.id')),
+                          Column('amenity_id', String(60),
+                                 ForeignKey('places.id')),
+                          )
 
 
 class Place(BaseModel, Base):
@@ -35,7 +36,7 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", back_populates="places",
                            cascade="all, delete")
     amenities = relationship(
-        'Amenity', secondary=place_amenity, viewonly=False,
+        'Amenity', secondary='place_amenity', viewonly=False,
         back_populates='place_amenities')
 
     @property

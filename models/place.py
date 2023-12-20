@@ -2,8 +2,15 @@
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
 from models.review import Review
-from sqlalchemy import String, Column, ForeignKey, Integer, Float
+from sqlalchemy import String, Column, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
+
+
+place_amenity = Table('user', Base.metadata,
+                      Column('place_id', String(60), ForeignKey('places.id')),
+                      Column('amenity_id', String(60),
+                             ForeignKey('places.id')),
+                      )
 
 
 class Place(BaseModel, Base):
@@ -25,7 +32,9 @@ class Place(BaseModel, Base):
     cities = relationship("City", back_populates="places")
     reviews = relationship("Review", back_populates="palce",
                            cascade="all, delete")
-    
+    amenities = relationship(
+        'Amenity', secondary=place_amenity, viewonly=False)
+
     @property
     def reviews(self):
         """Getter attribute for reviews in FileStorage"""
@@ -36,5 +45,3 @@ class Place(BaseModel, Base):
             if rev.place_id == self.id:
                 reviews_list.append(rev)
         return reviews_list
-
-    # amenity_ids = []

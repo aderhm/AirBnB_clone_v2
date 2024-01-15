@@ -20,4 +20,6 @@ config_content="
 "
 sudo sed -i "38i$config_content" /etc/nginx/sites-available/default
 
+sudo ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
 sudo service nginx restart

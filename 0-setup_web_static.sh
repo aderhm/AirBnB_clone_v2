@@ -2,8 +2,7 @@
 # Prepare the web servers.
 
 # Install Nginx
-sudo apt-get -y update
-sudo apt-get -y install nginx
+sudo apt-get -y install nginx > /dev/null
 
 # Create necessary directories
 sudo mkdir -p /data/web_static/releases/test/
@@ -11,7 +10,7 @@ sudo mkdir -p /data/web_static/shared/
 sudo touch /data/web_static/releases/test/index.html
 
 # Create fake HTML content
-echo "<html><body>Hello, World!</body></html>" | sudo tee /data/web_static/releases/test/index.html > /dev/null
+echo "<html><body>Hello, World!</body></html>" > /data/web_static/releases/test/index.html
 
 # Create or recreate symbolic link
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current

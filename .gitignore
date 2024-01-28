@@ -2,6 +2,7 @@
 /models/engine/__pycache__
 /tests/test_models/__pycache__
 /tests/test_models/test_engine/__pycache__
+/web_flask/__pycache__
 /file.json
 /test_params_create
 /main_delete.py

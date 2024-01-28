@@ -13,13 +13,14 @@ def get_cities_by_states():
     """Gets all states and displays them as a list in an HTML page
     """
     all_states = storage.all(State)
-    return render_template('9-states.html', all_states=all_states)
+    return render_template('9-states.html', state=all_states)
 
 
 @app.route("/states/<id>", strict_slashes=False)
 def get_state_by_id(id):
-    """Displays a state if it exists."""
-    for state in storage.all("State").values():
+    """Displays a state if it exists
+    """
+    for state in storage.all(State).values():
         if state.id == id:
             return render_template("9-states.html", state=state)
     return render_template("9-states.html")
